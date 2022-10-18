@@ -1,16 +1,16 @@
 "use strict";
 
 const _ = require('underscore');
-const tf = require('@tensorflow/tfjs');
+const tf = require('@tensorflow/tfjs-node-gpu');
 
 const SIZE  = 11;
-const PLANE_COUNT = 1; // TODO: 2
+const PLANE_COUNT = 2; // TODO: 2
 
-const BATCH_SIZE  = 1; // 128;
-const EPOCH_COUNT = 1; // 10;
+const BATCH_SIZE  = 128;
+const EPOCH_COUNT = 10;
 const VALID_SPLIT = 0.1;
 
-const FILE_PREFIX = 'file:///Users/User';
+const FILE_PREFIX = 'file:///users/valen';
 
 async function init() {
     await tf.ready();

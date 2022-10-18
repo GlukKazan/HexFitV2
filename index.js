@@ -43,8 +43,8 @@ async function proceed() {
         console: false 
     });
     for await (const line of rl) {
-        console.log(line);
-        logger.info(line);
+//      console.log(line);
+//      logger.info(line);
         const result = line.match(/([^;]+);(\d+);/);
         if (result) {
             const fen = result[1];

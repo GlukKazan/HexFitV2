@@ -3,7 +3,7 @@
 const _ = require('underscore');
 const ml = require('./model');
 
-const BATCH = 1; //1024;
+const BATCH = 256;
 
 const LETTERS = 'ABCDEFGHIJKabcdefghijk';
 
@@ -83,8 +83,8 @@ async function proceed(model, fen, pos, logger) {
             cnt++;
             if ((cnt % 1000) == 0) {
                 await ml.save(model, 'hex-' + ml.PLANE_COUNT + '-' + ml.SIZE + '-' + cnt + '.json');
-                console.log('Save [' + cnt + ']: ' + data);
-                logger.info('Save [' + cnt + ']: ' + data);
+                console.log('Save [' + cnt + ']: ' + fen);
+                logger.info('Save [' + cnt + ']: ' + fen);
             }
         }
         xo = 0; yo = 0;
