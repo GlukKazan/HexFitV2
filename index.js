@@ -52,7 +52,7 @@ async function proceed() {
             await game.proceed(model, fen, +pos, logger);
         }
     }
-//  await ml.save(model, 'hex-' + ml.PLANE_COUNT + '-' + ml.SIZE + '.json');
+    await ml.save(model, 'hex-' + ml.PLANE_COUNT + '-' + ml.SIZE + '.json');
 }
 
 async function run() {
