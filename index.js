@@ -45,11 +45,12 @@ async function proceed() {
     for await (const line of rl) {
 //      console.log(line);
 //      logger.info(line);
-        const result = line.match(/([^;]+);(\d+);/);
+        const result = line.match(/([^;]+);(\d+);([-\d]+);/);
         if (result) {
             const fen = result[1];
             const pos = result[2];
-            await game.proceed(model, fen, +pos, logger);
+            const win = result[3];
+            await game.proceed(model, fen, +pos, win, logger);
         }
     }
     await ml.save(model, 'hex-' + ml.PLANE_COUNT + '-' + ml.SIZE + '.json');

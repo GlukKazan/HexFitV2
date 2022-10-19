@@ -9,6 +9,7 @@ const LETTERS = 'ABCDEFGHIJKabcdefghijk';
 
 let X = null;
 let Y = null;
+let Z = null;
 
 let C = 0;
 let xo = 0;
@@ -76,10 +77,10 @@ function encode(fen, size, X, offset) {
     }
 }
 
-async function proceed(model, fen, pos, logger) {
+async function proceed(model, fen, pos, winner, logger) {
     if ((X === null) || (C >= BATCH)) {
         if (X !== null) {
-            await ml.fit(model, ml.SIZE, X, Y, C, logger);
+            await ml.fit(model, ml.SIZE, X, Y, Z, C, logger);
             cnt++;
             if ((cnt % 1000) == 0) {
                 await ml.save(model, 'hex-' + ml.PLANE_COUNT + '-' + ml.SIZE + '-' + cnt + '.json');
@@ -90,10 +91,12 @@ async function proceed(model, fen, pos, logger) {
         xo = 0; yo = 0;
         X = new Float32Array(ml.PLANE_COUNT * BATCH * ml.SIZE * ml.SIZE);
         Y = new Float32Array(BATCH * ml.SIZE * ml.SIZE);
+        Z = new Float32Array(BATCH);
         C = 0;
     }
     encode(fen, ml.SIZE, X, xo);
     Y[yo + pos] = 1;
+    Z[C] = winner;
 //  dump(X, ml.SIZE, xo, Y);
     xo += ml.SIZE * ml.SIZE * ml.PLANE_COUNT;
     yo += ml.SIZE * ml.SIZE;
