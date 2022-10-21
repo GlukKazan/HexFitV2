@@ -3,12 +3,13 @@
 const _ = require('underscore');
 const tf = require('@tensorflow/tfjs-node-gpu');
 
-const SIZE  = 11;
-const PLANE_COUNT = 1; // TODO: 2
+const SIZE          = 11;
+const PLANE_COUNT   = 1;
 
-const BATCH_SIZE  = 128;
-const EPOCH_COUNT = 10;
-const VALID_SPLIT = 0.1;
+const BATCH_SIZE    = 1024;
+const EPOCH_COUNT   = 1;
+const VALID_SPLIT   = 0.1;
+const LEARNING_RATE = 0.001;
 
 const FILE_PREFIX = 'file:///users/valen';
 
@@ -16,6 +17,20 @@ async function init() {
     await tf.ready();
     await tf.enableProdMode();
     console.log(tf.getBackend());
+}
+
+async function load(url, logger) {
+    const t0 = Date.now();
+    await init();
+    const model = await tf.loadLayersModel(url);
+    const opt = tf.train.sgd(LEARNING_RATE);
+    model.compile({optimizer: opt, loss: ['categoricalCrossentropy', 'meanSquaredError'], metrics: ['accuracy']});
+    const t1 = Date.now();
+    console.log('Model [' + url + '] loaded: ' + (t1 - t0));
+    if (!_.isUndefined(logger)) {
+        logger.info('Model [' + url + '] loaded: ' + (t1 - t0));
+    }
+    return model;
 }
 
 async function create(logger) {
@@ -81,7 +96,8 @@ async function createEx(logger) {
     const value = tf.layers.dense({units: 1, activation: 'tanh'}).apply(vh);
 
     const model = tf.model({inputs: input, outputs: [policy, value]});
-    model.compile({optimizer: 'sgd', loss: ['categoricalCrossentropy', 'meanSquaredError'], metrics: ['accuracy']});
+    const opt = tf.train.sgd(LEARNING_RATE);
+    model.compile({optimizer: opt, loss: ['categoricalCrossentropy', 'meanSquaredError'], metrics: ['accuracy']});
    
     const t1 = Date.now();
     console.log('Model created: ' + (t1 - t0));
@@ -132,15 +148,14 @@ async function fitEx(model, size, x, y, z, batch, logger) {
     const t0 = Date.now();
     const h = await model.fit(xs, [ys, zs], {
         batchSize: BATCH_SIZE,
-        epochs: EPOCH_COUNT,
-        validationSplit: VALID_SPLIT
+        epochs: EPOCH_COUNT
     });    
 
 //  console.log(h);
     for (let i = 0; i < EPOCH_COUNT; i++) {
-        console.log('epoch = ' + i + ', acc = [' + h.history.dense_Dense3_acc[i] + ' ,' + h.history.dense_Dense5_acc[i] + '], loss = [' + h.history.dense_Dense3_loss[i] + ' ,' + h.history.dense_Dense5_loss[i] + ' ,' + h.history.loss[i] + '], val_acc = [' + h.history.val_dense_Dense3_acc[i] + ' ,' + h.history.val_dense_Dense5_acc[i] + '], val_loss = [' + h.history.val_dense_Dense3_loss[i] + ' ,' + h.history.val_dense_Dense5_loss[i] + ' ,' + h.history.val_loss[i] + ']');
+        console.log('epoch = ' + i + ', acc = [' + h.history.dense_Dense3_acc[i] + ' ,' + h.history.dense_Dense5_acc[i] + '], loss = [' + h.history.dense_Dense3_loss[i] + ' ,' + h.history.dense_Dense5_loss[i] + ' ,' + h.history.loss[i] + ']');
         if (!_.isUndefined(logger)) {
-            logger.info('epoch = ' + i + ', acc = [' + h.history.dense_Dense3_acc[i] + ' ,' + h.history.dense_Dense5_acc[i] + '], loss = [' + h.history.dense_Dense3_loss[i] + ' ,' + h.history.dense_Dense5_loss[i] + ' ,' + h.history.loss[i] + '], val_acc = [' + h.history.val_dense_Dense3_acc[i] + ' ,' + h.history.val_dense_Dense5_acc[i] + '], val_loss = [' + h.history.val_dense_Dense3_loss[i] + ' ,' + h.history.val_dense_Dense5_loss[i] + ' ,' + h.history.val_loss[i] + ']');
+            logger.info('epoch = ' + i + ', acc = [' + h.history.dense_Dense3_acc[i] + ' ,' + h.history.dense_Dense5_acc[i] + '], loss = [' + h.history.dense_Dense3_loss[i] + ' ,' + h.history.dense_Dense5_loss[i] + ' ,' + h.history.loss[i] + ']');
         }
     }
     const t1 = Date.now();
@@ -161,6 +176,7 @@ async function save(model, fileName) {
 module.exports.SIZE = SIZE;
 module.exports.PLANE_COUNT = PLANE_COUNT;
 
+module.exports.load = load;
 module.exports.create = createEx;
 module.exports.fit = fitEx;
 module.exports.save = save;

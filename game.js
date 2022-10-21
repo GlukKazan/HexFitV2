@@ -3,7 +3,7 @@
 const _ = require('underscore');
 const ml = require('./model');
 
-const BATCH = 256;
+const BATCH = 4096;
 
 const LETTERS = 'ABCDEFGHIJKabcdefghijk';
 
@@ -83,7 +83,7 @@ async function proceed(model, fen, pos, winner, logger) {
             await ml.fit(model, ml.SIZE, X, Y, Z, C, logger);
             cnt++;
             if ((cnt % 1000) == 0) {
-                await ml.save(model, 'hex-' + ml.PLANE_COUNT + '-' + ml.SIZE + '-' + cnt + '.json');
+                await ml.save(model, 'reinforce-' + ml.PLANE_COUNT + '-' + ml.SIZE + '-' + cnt + '.json');
                 console.log('Save [' + cnt + ']: ' + fen);
                 logger.info('Save [' + cnt + ']: ' + fen);
             }
