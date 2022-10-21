@@ -87,12 +87,12 @@ async function createEx(logger) {
     const c4 = tf.layers.conv2d({filters: 32, kernelSize: [5, 5], dataFormat: 'channelsFirst', activation: 'relu'}).apply(z4);
 
     const fl = tf.layers.flatten().apply(c4);
-    const out = tf.layers.dense({units: 512, activation: act}).apply(fl);
+    const out = tf.layers.dense({units: 512, activation: 'relu'}).apply(fl);
 
-    const ph = tf.layers.dense({units: 512, activation: act}).apply(out);
+    const ph = tf.layers.dense({units: 512, activation: 'relu'}).apply(out);
     const policy = tf.layers.dense({units: SIZE * SIZE, activation: 'softmax'}).apply(ph);
 
-    const vh = tf.layers.dense({units: 512, activation: act}).apply(out);
+    const vh = tf.layers.dense({units: 512, activation: 'relu'}).apply(out);
     const value = tf.layers.dense({units: 1, activation: 'tanh'}).apply(vh);
 
     const model = tf.model({inputs: input, outputs: [policy, value]});
