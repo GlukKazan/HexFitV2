@@ -10,6 +10,7 @@ const BATCH_SIZE    = 1024;
 const EPOCH_COUNT   = 1;
 const VALID_SPLIT   = 0.1;
 const LEARNING_RATE = 0.001;
+const FREEZE_CNT    = 4;
 
 const FILE_PREFIX = 'file:///users/valen';
 
@@ -17,6 +18,10 @@ async function init() {
     await tf.ready();
     await tf.enableProdMode();
     console.log(tf.getBackend());
+    for (let i = 0; i < FREEZE_CNT; i++) {
+        const l = model.getLayer(null, i);
+        l.trainable = false;
+    }
 }
 
 async function load(url, logger) {
@@ -25,6 +30,7 @@ async function load(url, logger) {
     const model = await tf.loadLayersModel(url);
     const opt = tf.train.sgd(LEARNING_RATE);
     model.compile({optimizer: opt, loss: ['categoricalCrossentropy', 'meanSquaredError'], metrics: ['accuracy']});
+//  model.summary();
     const t1 = Date.now();
     console.log('Model [' + url + '] loaded: ' + (t1 - t0));
     if (!_.isUndefined(logger)) {
