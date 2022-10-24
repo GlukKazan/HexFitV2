@@ -47,12 +47,13 @@ async function proceed() {
     for await (const line of rl) {
 //      console.log(line);
 //      logger.info(line);
-        const result = line.match(/([^;]+);(\d+);([-\d]+);/);
+        const result = line.match(/([^;]+);(\d+);([-\d]+);([-.\d]+)/);
         if (result) {
             const fen = result[1];
             const pos = result[2];
             const win = result[3];
-            await game.proceed(model, fen, +pos, win, logger);
+            const est = result[4];
+            await game.proceed(model, fen, +pos, win, est, logger);
         }
     }
     await ml.save(model, 'reinforce-' + ml.PLANE_COUNT + '-' + ml.SIZE + '.json');

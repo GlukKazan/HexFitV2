@@ -77,7 +77,7 @@ function encode(fen, size, X, offset) {
     }
 }
 
-async function proceed(model, fen, pos, winner, logger) {
+async function proceed(model, fen, pos, winner, estimate, logger) {
     if ((X === null) || (C >= BATCH)) {
         if (X !== null) {
             await ml.fit(model, ml.SIZE, X, Y, Z, C, logger);
@@ -95,7 +95,7 @@ async function proceed(model, fen, pos, winner, logger) {
         C = 0;
     }
     encode(fen, ml.SIZE, X, xo);
-    Y[yo + pos] = 1;
+    Y[yo + pos] = winner - estimate;
     Z[C] = winner;
 //  dump(X, ml.SIZE, xo, Y);
     xo += ml.SIZE * ml.SIZE * ml.PLANE_COUNT;
