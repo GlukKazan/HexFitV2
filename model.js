@@ -10,7 +10,7 @@ const BATCH_SIZE    = 1024;
 const EPOCH_COUNT   = 1;
 const VALID_SPLIT   = 0.1;
 const LEARNING_RATE = 0.001;
-const FREEZE_CNT    = 4;
+const FREEZE_CNT    = 8;
 
 const FILE_PREFIX = 'file:///users/valen';
 
@@ -18,16 +18,16 @@ async function init() {
     await tf.ready();
     await tf.enableProdMode();
     console.log(tf.getBackend());
-    for (let i = 0; i < FREEZE_CNT; i++) {
-        const l = model.getLayer(null, i);
-        l.trainable = false;
-    }
 }
 
 async function load(url, logger) {
     const t0 = Date.now();
     await init();
     const model = await tf.loadLayersModel(url);
+    for (let i = 0; i < FREEZE_CNT; i++) {
+        const l = model.getLayer(null, i);
+        l.trainable = false;
+    }
     const opt = tf.train.sgd(LEARNING_RATE);
     model.compile({optimizer: opt, loss: ['categoricalCrossentropy', 'meanSquaredError'], metrics: ['accuracy']});
 //  model.summary();
@@ -62,7 +62,8 @@ async function create(logger) {
     model.add(tf.layers.dense({units: 512, activation: 'relu'}));    
 
     model.add(tf.layers.dense({units: SIZE * SIZE, activation: 'softmax'}));
-    model.compile({optimizer: 'sgd', loss: 'categoricalCrossentropy', metrics: ['accuracy']});
+    const opt = tf.train.sgd(LEARNING_RATE);
+    model.compile({optimizer: opt, loss: 'categoricalCrossentropy', metrics: ['accuracy']});
 
     const t1 = Date.now();
     console.log('Model created: ' + (t1 - t0));
