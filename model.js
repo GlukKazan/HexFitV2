@@ -6,11 +6,11 @@ const tf = require('@tensorflow/tfjs-node-gpu');
 const SIZE          = 11;
 const PLANE_COUNT   = 1;
 
-const BATCH_SIZE    = 1024;
-const EPOCH_COUNT   = 1;
+const BATCH_SIZE    = 32;
+const EPOCH_COUNT   = 10;
 const VALID_SPLIT   = 0.1;
 const LEARNING_RATE = 0.001;
-const FREEZE_CNT    = 8;
+const FREEZE_CNT    = 0;
 
 const FILE_PREFIX = 'file:///users/valen';
 
@@ -29,7 +29,7 @@ async function load(url, logger) {
         l.trainable = false;
     }
     const opt = tf.train.sgd(LEARNING_RATE);
-    model.compile({optimizer: opt, loss: ['categoricalCrossentropy', 'meanSquaredError'], metrics: ['accuracy']});
+    model.compile({optimizer: 'sgd', loss: ['categoricalCrossentropy', 'meanSquaredError'], metrics: ['accuracy']});
 //  model.summary();
     const t1 = Date.now();
     console.log('Model [' + url + '] loaded: ' + (t1 - t0));
@@ -63,7 +63,7 @@ async function create(logger) {
 
     model.add(tf.layers.dense({units: SIZE * SIZE, activation: 'softmax'}));
     const opt = tf.train.sgd(LEARNING_RATE);
-    model.compile({optimizer: opt, loss: 'categoricalCrossentropy', metrics: ['accuracy']});
+    model.compile({optimizer: 'sgd', loss: 'categoricalCrossentropy', metrics: ['accuracy']});
 
     const t1 = Date.now();
     console.log('Model created: ' + (t1 - t0));
