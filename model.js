@@ -6,7 +6,7 @@ const tf = require('@tensorflow/tfjs-node-gpu');
 const SIZE          = 11;
 const PLANE_COUNT   = 1;
 
-const BATCH_SIZE    = 32;
+const BATCH_SIZE    = 1024;
 const EPOCH_COUNT   = 10;
 const VALID_SPLIT   = 0.1;
 const LEARNING_RATE = 0.001;
@@ -104,7 +104,7 @@ async function createEx(logger) {
 
     const model = tf.model({inputs: input, outputs: [policy, value]});
     const opt = tf.train.sgd(LEARNING_RATE);
-    model.compile({optimizer: opt, loss: ['categoricalCrossentropy', 'meanSquaredError'], metrics: ['accuracy']});
+    model.compile({optimizer: 'sgd', loss: ['categoricalCrossentropy', 'meanSquaredError'], metrics: ['accuracy']});
    
     const t1 = Date.now();
     console.log('Model created: ' + (t1 - t0));

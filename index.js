@@ -24,7 +24,7 @@ const logFormat = winston.format.combine(
 
 var transport = new winston.transports.DailyRotateFile({
     dirname: '',
-    filename: 'reinforce-' + ml.PLANE_COUNT + '-' + ml.SIZE + '-%DATE%.log',
+    filename: 'zero-' + ml.PLANE_COUNT + '-' + ml.SIZE + '-%DATE%.log',
     datePattern: 'YYYY-MM-DD',
     zippedArchive: true,
     maxSize: '20m',
@@ -39,7 +39,8 @@ var logger = winston.createLogger({
 });
 
 async function proceed() {
-    model = await ml.load(URL, logger);
+//  model = await ml.load(URL, logger);
+    model = await ml.create(logger);
     const rl = readline.createInterface({
         input: fs.createReadStream('data/hex-' + ml.SIZE + '.csv'), 
         console: false 
@@ -56,7 +57,7 @@ async function proceed() {
             await game.proceed(model, fen, +pos, win, est, logger);
         }
     }
-    await ml.save(model, 'reinforce-' + ml.PLANE_COUNT + '-' + ml.SIZE + '.json');
+    await ml.save(model, 'zero-' + ml.PLANE_COUNT + '-' + ml.SIZE + '.json');
 }
 
 async function run() {
