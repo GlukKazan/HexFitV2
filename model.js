@@ -61,6 +61,32 @@ async function create(logger) {
     model.add(tf.layers.flatten());
     model.add(tf.layers.dense({units: 512, activation: 'relu'}));    
 
+/*
+    model.add(tf.layers.zeroPadding2d({padding: [3, 3], inputShape: shape, dataFormat: 'channelsFirst'}));
+    model.add(tf.layers.conv2d({filters: 64, kernelSize: [7, 7], padding: 'valid', dataFormat: 'channelsFirst', activation: 'relu'}));
+
+    model.add(tf.layers.zeroPadding2d({padding: [2, 2], dataFormat: 'channelsFirst'}));
+    model.add(tf.layers.conv2d({filters: 64, kernelSize: [5, 5], dataFormat: 'channelsFirst', activation: 'relu'}));
+
+    model.add(tf.layers.zeroPadding2d({padding: [2, 2], dataFormat: 'channelsFirst'}));
+    model.add(tf.layers.conv2d({filters: 64, kernelSize: [5, 5], dataFormat: 'channelsFirst', activation: 'relu'}));
+
+    model.add(tf.layers.zeroPadding2d({padding: [2, 2], dataFormat: 'channelsFirst'}));
+    model.add(tf.layers.conv2d({filters: 48, kernelSize: [5, 5], dataFormat: 'channelsFirst', activation: 'relu'}));
+
+    model.add(tf.layers.zeroPadding2d({padding: [2, 2], dataFormat: 'channelsFirst'}));
+    model.add(tf.layers.conv2d({filters: 48, kernelSize: [5, 5], dataFormat: 'channelsFirst', activation: 'relu'}));
+
+    model.add(tf.layers.zeroPadding2d({padding: [2, 2], dataFormat: 'channelsFirst'}));
+    model.add(tf.layers.conv2d({filters: 32, kernelSize: [5, 5], dataFormat: 'channelsFirst', activation: 'relu'}));
+
+    model.add(tf.layers.zeroPadding2d({padding: [2, 2], dataFormat: 'channelsFirst'}));
+    model.add(tf.layers.conv2d({filters: 32, kernelSize: [5, 5], dataFormat: 'channelsFirst', activation: 'relu'}));
+
+    model.add(tf.layers.flatten());
+    model.add(tf.layers.dense({units: 1024, activation: 'relu'}));
+*/
+
     model.add(tf.layers.dense({units: SIZE * SIZE, activation: 'softmax'}));
     const opt = tf.train.sgd(LEARNING_RATE);
     model.compile({optimizer: 'sgd', loss: 'categoricalCrossentropy', metrics: ['accuracy']});
