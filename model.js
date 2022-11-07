@@ -123,15 +123,15 @@ async function fit(model, size, x, y, batch, logger) {
     const t0 = Date.now();
     const h = await model.fit(xs, ys, {
         batchSize: BATCH_SIZE,
-        epochs: EPOCH_COUNT,
-        validationSplit: VALID_SPLIT
+        epochs: EPOCH_COUNT/*,
+        validationSplit: VALID_SPLIT*/
     });    
 
 //  console.log(h);
     for (let i = 0; i < EPOCH_COUNT; i++) {
-        console.log('epoch = ' + i + ', acc = ' + h.history.acc[i] + ', loss = ' + h.history.loss[i] + ', val_acc = ' + h.history.val_acc[i] + ', val_loss = ' + h.history.val_loss[i]);
+        console.log('epoch = ' + i + ', acc = ' + h.history.acc[i] + ', loss = ' + h.history.loss[i] /*+ ', val_acc = ' + h.history.val_acc[i] + ', val_loss = ' + h.history.val_loss[i]*/);
         if (!_.isUndefined(logger)) {
-            logger.info('epoch = ' + i + ', acc = ' + h.history.acc[i] + ', loss = ' + h.history.loss[i] + ', val_acc = ' + h.history.val_acc[i] + ', val_loss = ' + h.history.val_loss[i]);
+            logger.info('epoch = ' + i + ', acc = ' + h.history.acc[i] + ', loss = ' + h.history.loss[i] /*+ ', val_acc = ' + h.history.val_acc[i] + ', val_loss = ' + h.history.val_loss[i]*/);
         }
     }
     const t1 = Date.now();
@@ -184,6 +184,6 @@ module.exports.SIZE = SIZE;
 module.exports.PLANE_COUNT = PLANE_COUNT;
 
 module.exports.load = load;
-module.exports.create = createEx;
-module.exports.fit = fitEx;
+module.exports.create = create;
+module.exports.fit = fit;
 module.exports.save = save;

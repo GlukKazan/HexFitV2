@@ -80,7 +80,7 @@ function encode(fen, size, X, offset) {
 async function proceed(model, fen, pos, winner, estimate, logger) {
     if ((X === null) || (C >= BATCH)) {
         if (X !== null) {
-            await ml.fit(model, ml.SIZE, X, Y, Z, C, logger);
+            await ml.fit(model, ml.SIZE, X, Y, /*Z,*/ C, logger);
             cnt++;
             if ((cnt % 1000) == 0) {
                 await ml.save(model, 'zero-' + ml.PLANE_COUNT + '-' + ml.SIZE + '-' + cnt + '.json');
@@ -94,13 +94,15 @@ async function proceed(model, fen, pos, winner, estimate, logger) {
         Z = new Float32Array(BATCH);
         C = 0;
     }
-    encode(fen, ml.SIZE, X, xo);
-    Y[yo + pos] = 1; //(winner - estimate) > 0 ? winner - estimate : 0;
-    Z[C] = winner;
-//  dump(X, ml.SIZE, xo, Y);
-    xo += ml.SIZE * ml.SIZE * ml.PLANE_COUNT;
-    yo += ml.SIZE * ml.SIZE;
-    C++;
+//  if (winner > 0) {
+        encode(fen, ml.SIZE, X, xo);
+        Y[yo + pos] = 1; //(winner - estimate) > 0 ? winner - estimate : 0;
+        Z[C] = winner;
+    //  dump(X, ml.SIZE, xo, Y);
+        xo += ml.SIZE * ml.SIZE * ml.PLANE_COUNT;
+        yo += ml.SIZE * ml.SIZE;
+        C++;
+//  }
 }
 
 module.exports.proceed = proceed;
