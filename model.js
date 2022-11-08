@@ -6,8 +6,8 @@ const tf = require('@tensorflow/tfjs-node-gpu');
 const SIZE          = 11;
 const PLANE_COUNT   = 1;
 
-const BATCH_SIZE    = 256;
-const EPOCH_COUNT   = 50;
+const BATCH_SIZE    = 1024;
+const EPOCH_COUNT   = 100;
 const VALID_SPLIT   = 0.1;
 const LEARNING_RATE = 0.001;
 const FREEZE_CNT    = 0;
@@ -46,7 +46,7 @@ async function create(logger) {
     const model = tf.sequential();
     const shape = [PLANE_COUNT, SIZE, SIZE];
 
-/*  model.add(tf.layers.zeroPadding2d({padding: 3, inputShape: shape, dataFormat: 'channelsFirst'}));
+    model.add(tf.layers.zeroPadding2d({padding: 3, inputShape: shape, dataFormat: 'channelsFirst'}));
     model.add(tf.layers.conv2d({filters: 48, kernelSize: [7, 7], dataFormat: 'channelsFirst', activation: 'relu'}));
 
     model.add(tf.layers.zeroPadding2d({padding: 2, dataFormat: 'channelsFirst'}));
@@ -59,8 +59,9 @@ async function create(logger) {
     model.add(tf.layers.conv2d({filters: 32, kernelSize: [5, 5], dataFormat: 'channelsFirst', activation: 'relu'}));
 
     model.add(tf.layers.flatten());
-    model.add(tf.layers.dense({units: 512, activation: 'relu'}));*/
+    model.add(tf.layers.dense({units: 512, activation: 'relu'}));    
 
+/*
     model.add(tf.layers.zeroPadding2d({padding: [3, 3], inputShape: shape, dataFormat: 'channelsFirst'}));
     model.add(tf.layers.conv2d({filters: 64, kernelSize: [7, 7], padding: 'valid', dataFormat: 'channelsFirst', activation: 'relu'}));
 
@@ -84,6 +85,7 @@ async function create(logger) {
 
     model.add(tf.layers.flatten());
     model.add(tf.layers.dense({units: 1024, activation: 'relu'}));
+*/
 
     model.add(tf.layers.dense({units: SIZE * SIZE, activation: 'softmax'}));
     const opt = tf.train.sgd(LEARNING_RATE);
