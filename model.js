@@ -7,7 +7,7 @@ const SIZE          = 11;
 const PLANE_COUNT   = 1;
 
 const BATCH_SIZE    = 1024;
-const EPOCH_COUNT   = 20;
+const EPOCH_COUNT   = 50;
 const VALID_SPLIT   = 0.1;
 const LEARNING_RATE = 0.001;
 const FREEZE_CNT    = 0;
@@ -210,6 +210,6 @@ module.exports.SIZE = SIZE;
 module.exports.PLANE_COUNT = PLANE_COUNT;
 
 module.exports.load = load;
-module.exports.create = create;
-module.exports.fit = fit;
+module.exports.create = createEx;
+module.exports.fit = fitEx;
 module.exports.save = save;
