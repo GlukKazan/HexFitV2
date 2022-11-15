@@ -10,7 +10,7 @@ const BATCH_SIZE    = 1024;
 const EPOCH_COUNT   = 100;
 const VALID_SPLIT   = 0.1;
 const LEARNING_RATE = 0.001;
-const DROPOUT_RATE  = 0.5;
+const DROPOUT_RATE  = 0.2;
 const FREEZE_CNT    = 0;
 
 const FILE_PREFIX = 'file:///users/valen';
