@@ -10,7 +10,7 @@ const BATCH_SIZE    = 1024;
 const EPOCH_COUNT   = 100;
 const VALID_SPLIT   = 0.1;
 const LEARNING_RATE = 0.001;
-const DROPOUT_RATE  = 0.1;
+const DROPOUT_RATE  = 0.05;
 const FREEZE_CNT    = 0;
 
 const FILE_PREFIX = 'file:///users/valen';
@@ -217,13 +217,13 @@ async function fitEx(model, size, x, y, z, batch, logger) {
         epochs: EPOCH_COUNT
     });    
 
-//  console.log(h);
-    for (let i = 0; i < EPOCH_COUNT; i++) {
+    console.log(h);
+/*  for (let i = 0; i < EPOCH_COUNT; i++) {
         console.log('epoch = ' + i + ', acc = [' + h.history.dense_Dense3_acc[i] + ' ,' + h.history.dense_Dense5_acc[i] + '], loss = [' + h.history.dense_Dense3_loss[i] + ' ,' + h.history.dense_Dense5_loss[i] + ' ,' + h.history.loss[i] + ']');
         if (!_.isUndefined(logger)) {
             logger.info('epoch = ' + i + ', acc = [' + h.history.dense_Dense3_acc[i] + ' ,' + h.history.dense_Dense5_acc[i] + '], loss = [' + h.history.dense_Dense3_loss[i] + ' ,' + h.history.dense_Dense5_loss[i] + ' ,' + h.history.loss[i] + ']');
         }
-    }
+    }*/
     const t1 = Date.now();
     console.log('Fit time: ' + (t1 - t0));
     if (!_.isUndefined(logger)) {
@@ -243,6 +243,6 @@ module.exports.SIZE = SIZE;
 module.exports.PLANE_COUNT = PLANE_COUNT;
 
 module.exports.load = load;
-module.exports.create = create;
-module.exports.fit = fit;
+module.exports.create = createEx;
+module.exports.fit = fitEx;
 module.exports.save = save;
