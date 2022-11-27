@@ -82,7 +82,7 @@ async function proceed(model, fen, pos, winner, estimate, logger) {
         if (X !== null) {
             await ml.fit(model, ml.SIZE, X, Y, Z, C, logger);
             cnt++;
-            if ((cnt % 100) == 0) {
+            if ((cnt % 20) == 0) {
                 await ml.save(model, 'smallex-drop-' + ml.PLANE_COUNT + '-' + ml.SIZE + '-' + cnt + '.json');
                 console.log('Save [' + cnt + ']: ' + fen);
                 logger.info('Save [' + cnt + ']: ' + fen);

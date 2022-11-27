@@ -217,13 +217,13 @@ async function fitEx(model, size, x, y, z, batch, logger) {
         epochs: EPOCH_COUNT
     });    
 
-    console.log(h);
-/*  for (let i = 0; i < EPOCH_COUNT; i++) {
+//  console.log(h);
+    for (let i = 0; i < EPOCH_COUNT; i++) {
         console.log('epoch = ' + i + ', acc = [' + h.history.dense_Dense3_acc[i] + ' ,' + h.history.dense_Dense5_acc[i] + '], loss = [' + h.history.dense_Dense3_loss[i] + ' ,' + h.history.dense_Dense5_loss[i] + ' ,' + h.history.loss[i] + ']');
         if (!_.isUndefined(logger)) {
             logger.info('epoch = ' + i + ', acc = [' + h.history.dense_Dense3_acc[i] + ' ,' + h.history.dense_Dense5_acc[i] + '], loss = [' + h.history.dense_Dense3_loss[i] + ' ,' + h.history.dense_Dense5_loss[i] + ' ,' + h.history.loss[i] + ']');
         }
-    }*/
+    }
     const t1 = Date.now();
     console.log('Fit time: ' + (t1 - t0));
     if (!_.isUndefined(logger)) {
